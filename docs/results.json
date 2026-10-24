@@ -1,0 +1,94 @@
+{
+  "conversion_pct": 1.6,
+  "one_in": 62,
+  "median_days": 37,
+  "time_to_convert": [
+    {
+      "time_to_convert": "1. Within a week",
+      "pct": 30
+    },
+    {
+      "time_to_convert": "2. 1 to 4 weeks",
+      "pct": 15
+    },
+    {
+      "time_to_convert": "3. 1 to 3 months",
+      "pct": 20
+    },
+    {
+      "time_to_convert": "4. 3 to 12 months",
+      "pct": 35
+    }
+  ],
+  "repeat": [
+    {
+      "list_status": "On the list",
+      "repeat_pct": 11.5
+    },
+    {
+      "list_status": "Not on the list",
+      "repeat_pct": 2.2
+    }
+  ],
+  "list_share_by_period": [
+    {
+      "period": "1. 2021 to 2023",
+      "joined_list_first_pct": 5.0
+    },
+    {
+      "period": "2. 2024 to 2026",
+      "joined_list_first_pct": 20.0
+    }
+  ],
+  "channel_mix": [
+    {
+      "period": "2020",
+      "own_storefront_pct": 42.0,
+      "marketplace_pct": 58.0
+    },
+    {
+      "period": "2021",
+      "own_storefront_pct": 65.0,
+      "marketplace_pct": 34.0
+    },
+    {
+      "period": "2022",
+      "own_storefront_pct": 53.0,
+      "marketplace_pct": 47.0
+    },
+    {
+      "period": "2023",
+      "own_storefront_pct": 39.0,
+      "marketplace_pct": 61.0
+    },
+    {
+      "period": "2024 to 2026",
+      "own_storefront_pct": 20.0,
+      "marketplace_pct": 80.0
+    }
+  ],
+  "price_bands": [
+    {
+      "price_band": "1. Under 35",
+      "pct_of_items": 57
+    },
+    {
+      "price_band": "2. 35 to 59",
+      "pct_of_items": 26
+    },
+    {
+      "price_band": "3. 60 to 99",
+      "pct_of_items": 9
+    },
+    {
+      "price_band": "4. 100 and over",
+      "pct_of_items": 8
+    }
+  ],
+  "catalogue": {
+    "top_beat_pct": 12.0,
+    "top_10_pct": 36.0,
+    "sold_once_pct": 68.0
+  },
+  "co_produced_pct": 68.0
+}

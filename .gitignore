@@ -1,0 +1,13 @@
+# Everything in data/ stays on this computer.
+# raw/ holds customer names and emails, work/ holds the database and the hashing salt,
+# and clean/ is pseudonymised but still contains my revenue.
+data/raw/
+data/work/
+data/clean/
+
+# Tableau workbooks can embed the data, so only published dashboards and screenshots are shared.
+*.twbx
+
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
