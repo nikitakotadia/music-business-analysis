@@ -102,10 +102,12 @@ p { margin: 0; }
 .fact b { font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1; }
 .fact span { font-size: 14px; color: var(--fg2); }
 
-.proud-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px 72px; align-items: center; }
-.record-wrap { display: grid; place-items: center; }
+.proud-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "disc head" "disc list"; gap: 36px 72px; align-items: center; }
+.proud-head { grid-area: head; display: grid; gap: 22px; min-width: 0; }
+.record-wrap { grid-area: disc; display: grid; place-items: center; }
+.honours { grid-area: list; }
 .record {
-  width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center;
+  width: 100%; max-width: 420px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center;
   box-shadow: 0 30px 60px -30px rgba(40,30,0,.55), inset 0 0 0 1px rgba(90,65,10,.35);
 }
 .record .spin {
@@ -117,25 +119,27 @@ p { margin: 0; }
 .record::before { content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 1;
   background: radial-gradient(circle at 32% 26%, rgba(255,250,225,.5), transparent 40%); }
 .record-label {
-  width: 36%; aspect-ratio: 1; border-radius: 50%; background: #2B45D4; color: #fff; position: relative; z-index: 2;
-  display: grid; place-content: center; text-align: center; gap: 4px;
+  width: 34%; aspect-ratio: 1; border-radius: 50%; position: relative; z-index: 2;
+  background: radial-gradient(circle at 40% 35%, #26221A, #0E0D0B 70%);
+  box-shadow: 0 0 0 2px #C9A04A, 0 0 0 7px rgba(14,13,11,.85), 0 0 0 8px rgba(201,160,74,.6);
+  display: grid; place-content: center; text-align: center; gap: 4px; color: #E4C57A;
 }
-.record-label span { font-family: var(--mono); font-size: clamp(9px, 1vw, 11px); letter-spacing: .2em; text-transform: uppercase; opacity: .85; }
-.record-label b { font-family: var(--display); font-weight: 600; font-size: clamp(20px, 2.4vw, 32px); line-height: 1; }
+.record-label span { font-family: var(--mono); font-size: clamp(8px, .9vw, 10px); letter-spacing: .32em; text-transform: uppercase; opacity: .8; padding-left: .32em; }
+.record-label b { font-family: var(--display); font-weight: 500; font-size: clamp(18px, 2.2vw, 30px); line-height: 1; letter-spacing: .06em; }
 @media (prefers-reduced-motion: no-preference) { .record .spin { animation: spin 18s linear infinite; } }
 @keyframes spin { to { transform: rotate(360deg); } }
-.proud-copy { display: grid; gap: 24px; min-width: 0; }
 .honours { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--fg); }
-.honours li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.honours b { font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: clamp(30px, 3.6vw, 50px); line-height: 1; white-space: nowrap; }
-.honours span { font-size: 15px; color: var(--fg2); line-height: 1.4; }
+.honours li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.honours b { font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: clamp(30px, 3.4vw, 48px); line-height: 1; white-space: nowrap; }
+.honours span { font-size: 15px; color: var(--fg2); line-height: 1.45; max-width: 36em; }
 .gold-text { background: linear-gradient(100deg, #9C7224, #D9AE4F 40%, #B8882F 70%, #8A6420); -webkit-background-clip: text; background-clip: text; color: transparent; }
 @media (max-width: 860px) {
-  .proud-grid { grid-template-columns: minmax(0, 1fr); }
-  .record { max-width: 260px; }
+  .proud-grid { grid-template-columns: minmax(0, 200px) minmax(0, 1fr); grid-template-areas: "disc head" "list list"; gap: 28px 28px; }
 }
-@media (max-width: 480px) {
-  .honours li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+@media (max-width: 560px) {
+  .proud-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "disc" "head" "list"; }
+  .record-wrap { place-items: start; }
+  .record { max-width: 150px; }
 }
 .glance { background: var(--surface); border-top: 1px solid var(--line); }
 .glance .wrap { padding-block: 40px; display: grid; gap: 18px; }
@@ -164,6 +168,13 @@ code { font-family: var(--mono); font-size: .9em; }
 }
 @media (max-width: 860px) { .glance-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .glance-grid { grid-template-columns: minmax(0, 1fr); } }
+/* scroll motion: content is fully visible without JS; JS hides only what is below the fold, then reveals it */
+.js-reveal [data-reveal] { opacity: 0; transform: translate3d(0, 34px, 0); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
+.js-reveal [data-reveal="scale"] { transform: scale(.82) rotate(-12deg); }
+.js-reveal [data-reveal].shown { opacity: 1; transform: none; }
+.js-reveal .dotgrid.play i, .js-reveal .hundred.play i { animation: pop .45s cubic-bezier(.2,.8,.2,1.2) both; animation-delay: calc(var(--i, 0) * 14ms); }
+@keyframes pop { from { opacity: 0; transform: scale(.3); } }
+.hero h1, .hero .lede { will-change: transform, opacity; }
 .questions { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: q; }
 .questions li { counter-increment: q; display: grid; grid-template-columns: 56px minmax(0, 1fr); padding: 18px 0; border-top: 1px solid var(--line); font-size: clamp(19px, 2vw, 23px); line-height: 1.35; }
 .questions li:last-child { border-bottom: 1px solid var(--line); }
@@ -345,19 +356,19 @@ footer .links { display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: var
   <div class="wrap" style="gap:48px">
     <p class="label"><span class="tc">01</span>The business</p>
     <div class="proud-grid">
+      <div class="proud-head">
+        <h2>Eight years of producing and licensing music</h2>
+        <p class="read">I've produced music since 2018 for artists around the world, and license my instrumentals online through a public marketplace and my own storefront. I run the whole business myself: production, pricing, licence terms, delivery and promotion.</p>
+      </div>
       <div class="record-wrap" aria-hidden="true">
         <div class="record"><div class="spin"></div><div class="record-label"><span>Since</span><b>2018</b></div></div>
       </div>
-      <div class="proud-copy">
-        <h2>Eight years of producing and licensing music</h2>
-        <p class="read">I've produced music since 2018 and license my instrumentals online, through a public marketplace and my own storefront. I run the whole business myself: production, pricing, licence terms, delivery and promotion.</p>
-        <ul class="honours">
-          <li><b class="gold-text">Gold-certified</b><span>production credits</span></li>
-          <li><b>UK-charting</b><span>records I've produced on</span></li>
-          <li><b>UK + US</b><span>credits with internationally known artists</span></li>
-          <li><b>Independent</b><span>built and run entirely by me</span></li>
-        </ul>
-      </div>
+      <ul class="honours">
+        <li><b class="gold-text">Gold</b><span>Gold-certified and UK-charting production credits</span></li>
+        <li><b>#1</b><span>Produced on albums that debuted at number one on Apple Music and Spotify, including a number one on the Official UK Hip Hop and R&amp;B Albums Chart</span></li>
+        <li><b>International</b><span>Charting records in multiple countries, with credits alongside globally recognised artists</span></li>
+        <li><b>Recognised</b><span>Worked alongside Grammy-winning and Billboard number-one producers, profiled by music media, and placed in national retail</span></li>
+      </ul>
     </div>
     <p class="read small muted">Sales peaked in 2022 and have slowed since, which turns out to be useful here: it shows whether the email list keeps producing buyers when sales are quiet. To keep the business private, this page shows rates, shares and medians only. No customer, order or subscriber numbers, and no revenue.</p>
   </div>
@@ -861,6 +872,71 @@ FROM item_parties;</code></pre></details>
     }), { threshold: 0.3 });
     below.forEach(el => io.observe(el));
     setTimeout(() => els.forEach(el => el.classList.add("in")), 8000);
+  }
+  // Apple-style scroll reveals
+  if (!reduce && "IntersectionObserver" in window) {
+    const groups = [
+      ".label", "h2", ".read", ".lede", ".hero-figs", ".byline", ".glance-grid > div",
+      ".honours li", ".steps .step", ".callout", ".model", ".decisions li",
+      ".finding .left", ".finding .right", ".recs li", ".more > div", ".limits li", "footer .sign", "footer .links"
+    ];
+    const items = [];
+    groups.forEach(sel => {
+      const els = [...document.querySelectorAll(sel)].filter(el => !el.closest("[data-reveal]") && !el.hasAttribute("data-reveal"));
+      els.forEach(el => {
+        el.setAttribute("data-reveal", "");
+        const sibs = [...el.parentElement.children].filter(c => c.matches(sel));
+        el.style.setProperty("--d", Math.min(sibs.indexOf(el), 6) * 0.09 + "s");
+        items.push(el);
+      });
+    });
+    const rec = document.querySelector(".record-wrap");
+    if (rec) { rec.setAttribute("data-reveal", "scale"); items.push(rec); }
+    document.querySelectorAll(".dotgrid i, .hundred i").forEach((c, i, all) => {
+      c.style.setProperty("--i", [...c.parentElement.children].indexOf(c));
+    });
+
+    const counters = [...document.querySelectorAll(".hero-fig b, .finding .num")];
+    counters.forEach(el => el.dataset.final = el.innerHTML);
+    function countUp(el) {
+      const html = el.dataset.final, nums = [...html.matchAll(/\d+/g)];
+      if (!nums.length) return;
+      const t0 = performance.now(), dur = 1100;
+      (function step(now) {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        let i = 0;
+        el.innerHTML = html.replace(/\d+/g, m => Math.round(+m * e).toString());
+        if (k < 1) requestAnimationFrame(step); else el.innerHTML = html;
+      })(t0);
+    }
+
+    const vh = innerHeight;
+    const below = items.filter(el => el.getBoundingClientRect().top > vh * 0.92);
+    document.documentElement.classList.add("js-reveal");
+    items.filter(el => !below.includes(el)).forEach(el => el.classList.add("shown"));
+    const show = el => {
+      el.classList.add("shown");
+      el.querySelectorAll(".dotgrid, .hundred").forEach(g => g.classList.add("play"));
+      counters.filter(c => el.contains(c)).forEach(countUp);
+    };
+    const io2 = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { show(e.target); io2.unobserve(e.target); }
+    }), { threshold: 0.18, rootMargin: "0px 0px -6% 0px" });
+    below.forEach(el => io2.observe(el));
+    setTimeout(() => below.forEach(el => el.classList.add("shown")), 15000);
+
+    // Hero drifts and fades as you scroll past it
+    const h1 = document.querySelector(".hero h1"), lede = document.querySelector(".hero .lede");
+    let ticking = false;
+    addEventListener("scroll", () => {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(() => {
+        const p = Math.min(1, scrollY / (innerHeight * 0.9));
+        if (h1) { h1.style.transform = `translate3d(0, ${p * 60}px, 0)`; h1.style.opacity = 1 - p * 0.55; }
+        if (lede) { lede.style.transform = `translate3d(0, ${p * 30}px, 0)`; }
+        ticking = false;
+      });
+    }, { passive: true });
   }
 })();
 </script>
