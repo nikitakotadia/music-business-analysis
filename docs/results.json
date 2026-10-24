@@ -86,9 +86,13 @@
     }
   ],
   "catalogue": {
-    "top_beat_pct": 12.0,
+    "top_track_pct": 12.0,
     "top_10_pct": 36.0,
     "sold_once_pct": 68.0
   },
-  "co_produced_pct": 68.0
+  "co_produced_pct": 68.0,
+  "tests": {
+    "repeat": "p < 0.001",
+    "list_share": "p < 0.001"
+  }
 }

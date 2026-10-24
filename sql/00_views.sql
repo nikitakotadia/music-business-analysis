@@ -10,7 +10,7 @@ SELECT
     o.order_time_utc,
     o.channel,
     i.item_no,
-    i.beat_title,
+    i.track_title,
     i.list_price,
     i.sale_price
 FROM orders AS o

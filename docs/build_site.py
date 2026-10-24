@@ -51,6 +51,8 @@ cat = R["catalogue"]
 co_pct = R["co_produced_pct"]
 bands = R["price_bands"]
 mix = R["channel_mix"]
+tests = {k: v.replace("<", "&lt;") for k, v in R["tests"].items()}
+lift = 0.5 / conv_pct * 100
 
 
 # ---------- visuals ----------
@@ -113,7 +115,7 @@ waves_svg = "".join(
 page = f"""<title>Free Downloads to Customers</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Nikita Kotadia, data analyst: do free beat downloads turn into paying customers? A SQL case study on her own music business.">
+<meta name="description" content="Nikita Kotadia, data analyst: do free music downloads turn into paying customers? A SQL case study on her own music business.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -210,6 +212,68 @@ p {{ margin: 0; }}
 .fact b {{ font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1; }}
 .fact span {{ font-size: 14px; color: var(--fg2); }}
 
+.proud-grid {{ display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 40px 72px; align-items: center; }}
+.record-wrap {{ display: grid; place-items: center; }}
+.record {{
+  width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center;
+  box-shadow: 0 30px 60px -30px rgba(40,30,0,.55), inset 0 0 0 1px rgba(90,65,10,.35);
+}}
+.record .spin {{
+  position: absolute; inset: 0; border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, rgba(0,0,0,.10) 0 1px, transparent 1px 4px),
+    conic-gradient(from 20deg, #F3DC93, #B8882F, #F7E7AE, #9C7224, #EED38A, #B8882F, #F3DC93);
+}}
+.record::before {{ content: ""; position: absolute; inset: 0; border-radius: 50%; z-index: 1;
+  background: radial-gradient(circle at 32% 26%, rgba(255,250,225,.5), transparent 40%); }}
+.record-label {{
+  width: 36%; aspect-ratio: 1; border-radius: 50%; background: #2B45D4; color: #fff; position: relative; z-index: 2;
+  display: grid; place-content: center; text-align: center; gap: 4px;
+}}
+.record-label span {{ font-family: var(--mono); font-size: clamp(9px, 1vw, 11px); letter-spacing: .2em; text-transform: uppercase; opacity: .85; }}
+.record-label b {{ font-family: var(--display); font-weight: 600; font-size: clamp(20px, 2.4vw, 32px); line-height: 1; }}
+@media (prefers-reduced-motion: no-preference) {{ .record .spin {{ animation: spin 18s linear infinite; }} }}
+@keyframes spin {{ to {{ transform: rotate(360deg); }} }}
+.proud-copy {{ display: grid; gap: 24px; min-width: 0; }}
+.honours {{ list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--fg); }}
+.honours li {{ display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line); }}
+.honours b {{ font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: clamp(30px, 3.6vw, 50px); line-height: 1; white-space: nowrap; }}
+.honours span {{ font-size: 15px; color: var(--fg2); line-height: 1.4; }}
+.gold-text {{ background: linear-gradient(100deg, #9C7224, #D9AE4F 40%, #B8882F 70%, #8A6420); -webkit-background-clip: text; background-clip: text; color: transparent; }}
+@media (max-width: 860px) {{
+  .proud-grid {{ grid-template-columns: minmax(0, 1fr); }}
+  .record {{ max-width: 260px; }}
+}}
+@media (max-width: 480px) {{
+  .honours li {{ grid-template-columns: minmax(0, 1fr); gap: 4px; }}
+}}
+.glance {{ background: var(--surface); border-top: 1px solid var(--line); }}
+.glance .wrap {{ padding-block: 40px; display: grid; gap: 18px; }}
+.glance-grid {{ margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 32px; }}
+.glance-grid div {{ display: grid; gap: 6px; align-content: start; padding-top: 14px; border-top: 1px solid var(--line); min-width: 0; }}
+.glance-grid dt {{ font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); }}
+.glance-grid dd {{ margin: 0; font-size: 15px; line-height: 1.5; }}
+.model {{ padding: clamp(24px, 4vw, 36px); background: var(--surface); }}
+.schema {{ display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 0; min-width: 0; }}
+.tbl {{ background: var(--bg); border: 1px solid var(--line); display: grid; font-family: var(--mono); font-size: 12px; min-width: 0; }}
+.tbl b {{ font-weight: 500; padding: 8px 10px; border-bottom: 1px solid var(--line); background: var(--fg); color: var(--bg); }}
+.tbl span {{ padding: 5px 10px; color: var(--fg2); overflow-wrap: anywhere; }}
+.tbl span.key {{ color: var(--accent); }}
+.tbl-stack {{ display: grid; gap: 12px; min-width: 0; }}
+.join {{ position: relative; width: 100px; height: 1px; background: var(--accent); }}
+.join span {{ position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; color: var(--accent); white-space: nowrap; }}
+.decisions {{ list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--line); }}
+.decisions li {{ padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--fg2); }}
+.decisions b {{ color: var(--fg); font-weight: 600; }}
+code {{ font-family: var(--mono); font-size: .9em; }}
+.sig {{ justify-self: start; font-family: var(--mono); font-size: 12px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 10px; }}
+@media (max-width: 960px) {{
+  .schema {{ grid-template-columns: minmax(0, 1fr); justify-items: stretch; }}
+  .join {{ width: 1px; height: 36px; justify-self: center; }}
+  .join span {{ left: 10px; bottom: 50%; transform: translateY(50%); }}
+}}
+@media (max-width: 860px) {{ .glance-grid {{ grid-template-columns: repeat(2, minmax(0, 1fr)); }} }}
+@media (max-width: 560px) {{ .glance-grid {{ grid-template-columns: minmax(0, 1fr); }} }}
 .questions {{ list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: q; }}
 .questions li {{ counter-increment: q; display: grid; grid-template-columns: 56px minmax(0, 1fr); padding: 18px 0; border-top: 1px solid var(--line); font-size: clamp(19px, 2vw, 23px); line-height: 1.35; }}
 .questions li:last-child {{ border-bottom: 1px solid var(--line); }}
@@ -360,7 +424,7 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
   <div class="wrap">
     <p class="eyebrow"><b>Case study</b><span>SQL · Python · my own business data</span></p>
     <h1>Do free downloads turn into <em>customers?</em></h1>
-    <p class="lede">I've run a music production business since 2018, licensing beats to artists online. Like most producers, I give beats away as free downloads to build an email list. I joined my sales and email data to find out whether that actually works.</p>
+    <p class="lede">I've run a music production business since 2018, licensing my instrumentals to artists online. Like most producers, I give some away as free downloads to build an email list. I joined my sales and email data to find out whether that actually works.</p>
     <div class="hero-figs">
       <div class="hero-fig"><b>1 in {one_in}</b><span>free downloaders became a paying customer</span></div>
       <div class="hero-fig"><b>{median_days} days</b><span>median wait between download and first purchase</span></div>
@@ -370,23 +434,40 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
   </div>
 </header>
 
+<section class="glance" id="summary" data-name="Summary" aria-label="At a glance">
+  <div class="wrap">
+    <p class="label">At a glance</p>
+    <dl class="glance-grid">
+      <div><dt>Question</dt><dd>Do free downloads turn into paying customers, and how long does it take?</dd></div>
+      <div><dt>Data</dt><dd>My own sales and email list exports, January 2020 to September 2026</dd></div>
+      <div><dt>Method</dt><dd>Cleaned and pseudonymised in Python, analysed in SQL, comparisons tested with Fisher's exact test</dd></div>
+      <div><dt>Answer</dt><dd>1 in {one_in} free downloaders buy, after a median of {median_days} days. Buyers on the list are {ratio}× as likely to buy again ({tests["repeat"]}).</dd></div>
+      <div><dt>Recommendation</dt><dd>Follow up for a year, send new releases to past buyers first, and prove it with a holdout test</dd></div>
+      <div><dt>Tools</dt><dd>Python · pandas · SQLite · SQL (CTEs, window functions, views) · SciPy</dd></div>
+    </dl>
+  </div>
+</section>
+
 <main>
-<section class="sec" id="business" data-name="The business">
-  <div class="wrap split">
-    <div style="display:grid;gap:22px">
-      <p class="label"><span class="tc">01</span>The business</p>
-      <h2>Eight years of selling beats</h2>
-    </div>
-    <div style="display:grid;gap:26px">
-      <p class="read">I sell beat licences online, through a platform's public marketplace and through my own storefront. I run the whole operation myself: production, pricing, licence terms, delivery and promotion. My production credits include gold-certified and UK-charting releases.</p>
-      <div class="facts">
-        <div class="fact"><b>2018</b><span>trading since</span></div>
-        <div class="fact"><b>{co_pct:.0f}%</b><span>of beats sold were co-productions</span></div>
-        <div class="fact"><b>{cat["top_10_pct"]:.0f}%</b><span>of sales from my top 10 beats</span></div>
-        <div class="fact"><b>2</b><span>storefronts: a public marketplace and my own</span></div>
+<section class="sec proud" id="business" data-name="The business">
+  <div class="wrap" style="gap:48px">
+    <p class="label"><span class="tc">01</span>The business</p>
+    <div class="proud-grid">
+      <div class="record-wrap" aria-hidden="true">
+        <div class="record"><div class="spin"></div><div class="record-label"><span>Since</span><b>2018</b></div></div>
       </div>
-      <p class="read small muted">Sales peaked in 2022 and have slowed since, which turns out to be useful here: it shows whether the email list keeps producing buyers when sales are quiet. To keep the business private, this page shows rates, shares and medians only. No customer, order or subscriber numbers, and no revenue.</p>
+      <div class="proud-copy">
+        <h2>Eight years of producing and licensing music</h2>
+        <p class="read">I've produced music since 2018 and license my instrumentals online, through a public marketplace and my own storefront. I run the whole business myself: production, pricing, licence terms, delivery and promotion.</p>
+        <ul class="honours">
+          <li><b class="gold-text">Gold-certified</b><span>production credits</span></li>
+          <li><b>UK-charting</b><span>records I've produced on</span></li>
+          <li><b>UK + US</b><span>credits with internationally known artists</span></li>
+          <li><b>Independent</b><span>built and run entirely by me</span></li>
+        </ul>
+      </div>
     </div>
+    <p class="read small muted">Sales peaked in 2022 and have slowed since, which turns out to be useful here: it shows whether the email list keeps producing buyers when sales are quiet. To keep the business private, this page shows rates, shares and medians only. No customer, order or subscriber numbers, and no revenue.</p>
   </div>
 </section>
 
@@ -394,10 +475,10 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
   <div class="wrap split">
     <div style="display:grid;gap:22px">
       <p class="label"><span class="tc">02</span>The question</p>
-      <h2>Is a free beat worth giving away?</h2>
+      <h2>Is a free download worth giving away?</h2>
     </div>
     <div style="display:grid;gap:26px">
-      <p class="read">Every free download is a beat someone didn't pay for. In return, the downloader is added to my email list automatically. The trade only makes sense if some of them come back and buy.</p>
+      <p class="read">Every free download is a track someone didn't pay for. In return, the downloader is added to my email list automatically. The trade only makes sense if some of them come back and buy.</p>
       <ol class="questions">
         <li>What share of free downloaders become paying customers?</li>
         <li>How long do they take to buy?</li>
@@ -417,8 +498,8 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
       <p class="read">An export of every order from January 2020 to September 2026, and an export of my current email list. I cleaned both in Python with pandas, loaded them into SQLite, and answered every question in SQL.</p>
     </div>
     <div class="steps">
-      <div class="step"><span class="k">Block layout</span><p>Each order came out as a block of rows: the order, then a row per extra beat and per collaborator's share.</p><p>Parsed line by line into orders, items and payment splits.</p></div>
-      <div class="step"><span class="k">Broken columns</span><p>Beat titles containing commas had spilled into the next column.</p><p>Detected by field count and rejoined.</p></div>
+      <div class="step"><span class="k">Block layout</span><p>Each order came out as a block of rows: the order, then a row per extra track and per collaborator's share.</p><p>Parsed line by line into orders, items and payment splits.</p></div>
+      <div class="step"><span class="k">Broken columns</span><p>Track titles containing commas had spilled into the next column.</p><p>Detected by field count and rejoined.</p></div>
       <div class="step"><span class="k">Revenue splits</span><p>Most sales are split with collaborators, so the sale price isn't what I earned.</p><p>Kept every party's share separately and anonymised every collaborator.</p></div>
       <div class="step"><span class="k">Free checkouts</span><p>Some items went through checkout at a price of zero.</p><p>Flagged so they never count as purchases.</p></div>
     </div>
@@ -427,6 +508,34 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
       <h3>Two systems, two clocks</h3>
       <div class="clock" aria-hidden="true"><span>+4:00 EDT</span><span>+5:00 EST</span></div>
       <p class="read">When I first joined the files, most buyers seemed to subscribe exactly four or five hours before buying. That's the gap between US Eastern time and UTC: the email platform appears to record Eastern time without labelling it. With the clocks aligned, those buyers had joined the list at checkout, seconds before paying. Without the fix they'd have counted as free downloaders who converted, and the headline result would have been several times too high.</p>
+    </div>
+    <div class="model">
+      <div class="split">
+        <div style="display:grid;gap:14px">
+          <h3>The data model</h3>
+          <p class="small muted">Four tables. Emails become a hashed <code>customer_id</code>, which is the only link between sales and the email list.</p>
+        </div>
+        <div class="schema" role="img" aria-label="subscribers joins orders on customer_id; orders joins order_items and payment_splits on order_id">
+          <div class="tbl"><b>subscribers</b><span class="key">customer_id</span><span>optin_time_utc</span><span>source</span><span>tag_free_download</span></div>
+          <div class="join"><span>customer_id</span></div>
+          <div class="tbl"><b>orders</b><span class="key">order_id</span><span class="key">customer_id</span><span>order_time_utc</span><span>channel, status</span></div>
+          <div class="join"><span>order_id</span></div>
+          <div class="tbl-stack">
+            <div class="tbl"><b>order_items</b><span class="key">order_id</span><span>track_title</span><span>list_price, sale_price</span></div>
+            <div class="tbl"><b>payment_splits</b><span class="key">order_id</span><span>party</span><span>split_amount</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="split">
+      <h3>Decisions behind the numbers</h3>
+      <ul class="decisions">
+        <li><b>The one-hour rule.</b> Buyers are added to the list at checkout, so a conversion only counts when the first purchase comes more than an hour after joining.</li>
+        <li><b>Medians over averages.</b> A few buyers took most of a year, which would drag an average. The median shows the typical wait.</li>
+        <li><b>Imported contacts left out of timing.</b> Their join date is the day I uploaded them, so it says nothing about when they found me.</li>
+        <li><b>Fisher's exact test for comparisons.</b> The groups are small and repeat purchases are rare, which is where this test is reliable.</li>
+        <li><b>Privacy by design.</b> Every query returns a rate, share, median or index. Small groups are grouped or rounded so no total can be worked out.</li>
+      </ul>
     </div>
     <p class="read small muted">Privacy: customer emails are replaced with salted one-way hashes, so the files can be joined without anyone being identifiable. The data stays on my computer, and shares based on small groups are rounded so the numbers behind them can't be worked out.</p>
   </div>
@@ -442,7 +551,7 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
     <article class="finding">
       <div class="left">
         <span class="num">1 in {one_in}</span>
-        <h3>About {pct(conv_pct, 1)} of people who downloaded a free beat later bought one.</h3>
+        <h3>About {pct(conv_pct, 1)} of people who downloaded a free track later bought one.</h3>
         <p class="cap">A conversion counts only when the first paid purchase came more than an hour after joining the list. Inside the hour, the person joined by buying.</p>
       </div>
       <div class="right">
@@ -469,7 +578,8 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
       <div class="left">
         <span class="num">{ratio}×</span>
         <h3>Buyers on the list are five times as likely to buy again.</h3>
-        <p class="cap">A correlation, not proof: buyers who unsubscribed drop out of the list, and they were probably less likely to return anyway.</p>
+        <span class="sig">Fisher's exact test · {tests["repeat"]}</span>
+        <p class="cap">The gap is very unlikely to be chance, but it's still a correlation: buyers who unsubscribed drop out of the list, and they were probably less likely to return anyway.</p>
       </div>
       <div class="right">
         <p class="label">Out of every 100 buyers, how many bought again · since May 2021</p>
@@ -486,6 +596,7 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
         <span class="num">1 in 20<br>→ 1 in 5</span>
         <h3>As sales slowed, more new buyers came through the list.</h3>
         <p class="cap">The share of new buyers who joined the list before buying went from about {pct(early)} in the peak years to about {pct(recent)} since 2024. Because of the 2025 sync gap (see Limits), the recent figure is, if anything, low.</p>
+        <span class="sig">Fisher's exact test · {tests["list_share"]}</span>
       </div>
       <div class="right">
         <p class="label">New buyers who joined the list first</p>
@@ -509,7 +620,7 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
       <p class="read">The list works, but slowly. Most of the value arrives long after a welcome email would have been forgotten.</p>
     </div>
     <ol class="recs">
-      <li><h3>Email free downloaders for a year</h3><p>About {pct(100 - within_week)} of conversions came after the first week. Emails at one week, one month, three months and six months match when people actually buy.</p></li>
+      <li><h3>Email free downloaders for a year</h3><p>About {pct(100 - within_week)} of conversions came after the first week. Emails at one week, one month, three months and six months match when people actually buy. If they turned one more downloader in every 200 into a customer, the list would bring in about {lift:.0f}% more new customers.</p></li>
       <li><h3>Send new releases to past buyers first</h3><p>Buyers on the list are five times as likely to buy again, and buyers are added to it at checkout. They're the warmest audience I have.</p></li>
       <li><h3>Fix the sync, then test it</h3><p>Check the connection between the store and the email list so no sign-ups are lost again. Then send the follow-ups to a random half of new downloaders and compare. At a {pct(conv_pct, 1)} baseline, track opens and clicks early and judge purchases after six months.</p></li>
     </ol>
@@ -526,7 +637,7 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
       <div>
         <h3>Most sales are entry-level leases</h3>
         <div class="bars" data-grow>{price_rows}</div>
-        <p class="small muted">{pct(bands[0]["pct_of_items"])} of beats sold were listed under $35. Licences at $100 and over make up {pct(bands[3]["pct_of_items"])}.</p>
+        <p class="small muted">{pct(bands[0]["pct_of_items"])} of of licences sold were listed under $35. Licences at $100 and over make up {pct(bands[3]["pct_of_items"])}.</p>
         {sql_block("07_price_tiers.sql")}
       </div>
       <div>
@@ -536,15 +647,15 @@ footer .links {{ display: flex; flex-wrap: wrap; gap: 12px 28px; font-family: va
         {sql_block("06_channel_mix_by_year.sql")}
       </div>
       <div>
-        <h3>A few beats carry the catalogue</h3>
+        <h3>A few tracks carry the catalogue</h3>
         <p class="big">{cat["top_10_pct"]:.0f}%</p>
-        <p class="small muted">of paid sales came from my top 10 beats. The best seller alone accounts for {cat["top_beat_pct"]:.0f}%, and {cat["sold_once_pct"]:.0f}% of the beats that sold were bought only once.</p>
+        <p class="small muted">of paid sales came from my top 10 tracks. The best seller alone accounts for {cat["top_track_pct"]:.0f}%, and {cat["sold_once_pct"]:.0f}% of the tracks that sold were bought only once.</p>
         {sql_block("08_catalogue_concentration.sql")}
       </div>
       <div>
         <h3>Most of the catalogue is collaborative</h3>
         <p class="big">{co_pct:.0f}%</p>
-        <p class="small muted">of beats sold were co-produced with other producers. Every split is recorded in the payment data.</p>
+        <p class="small muted">of tracks sold were co-produced with other producers. Every split is recorded in the payment data.</p>
         {sql_block("09_collaboration.sql")}
       </div>
     </div>

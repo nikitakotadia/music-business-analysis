@@ -1,4 +1,4 @@
--- Q1. What share of free downloaders go on to buy a paid beat?
+-- Q1. What share of free downloaders go on to buy a paid licence?
 -- Free downloaders: subscribers the sales platform added after a free download.
 -- Converted: their first paid purchase came more than an hour after they joined.
 -- (Within the hour means they joined by buying, not by downloading.)
